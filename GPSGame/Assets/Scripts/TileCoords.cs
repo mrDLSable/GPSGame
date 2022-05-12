@@ -37,4 +37,36 @@ public class TileCoords
     public string GetURL(){
         return "http://tile.openstreetmap.org/" + zoom + "/" + x + "/" + y + ".png";
     }
+
+    /// <summary>
+    /// Returns the path to the image in the save.
+    /// </summary>
+    /// <returns></returns>
+    public string GetImagePath()
+    {
+        return Application.persistentDataPath + "/zones/" + x + "_" + y + ".png";
+    }
+
+    /// <summary>
+    /// Custom Hash code for dictionary comparisons
+    /// </summary>
+    /// <returns></returns>
+    public override int GetHashCode()
+    {
+        return ToString().GetHashCode();
+    }
+
+    /// <summary>
+    /// Custom comparison for dictionary purposes
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public override bool Equals(object obj)
+    {
+        if(obj.GetType() == this.GetType()){
+            TileCoords tc = (TileCoords)obj;
+            if(tc.x == this.x && tc.y == this.y) return true;
+        }
+        return false;
+    }
 }
