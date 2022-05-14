@@ -13,6 +13,11 @@ public class TileCoords
         CalculateFromGPS(GPSCoords);
     }
 
+    public TileCoords(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
     /// <summary>
     /// Convert the GPS Coordinates to Open Maps tile coordinates
     /// </summary>
@@ -68,5 +73,26 @@ public class TileCoords
             if(tc.x == this.x && tc.y == this.y) return true;
         }
         return false;
+    }
+
+    /// <summary>
+    /// Get the surrounding tile coordinates
+    /// </summary>
+    /// <returns></returns>
+    public List<TileCoords> GetSurrounding(int layers = 1){
+        List<TileCoords> surrounding = new List<TileCoords>();
+
+        for(int x = this.x - layers; x <= this.x + layers; x++){
+            for(int y = this.y - layers; y <= this.y + layers; y++){
+                if(x == this.x && y == this.y){
+                    
+                }else{
+                    TileCoords temp = new TileCoords(x, y);
+                    surrounding.Add(temp);
+                }
+            }
+        }
+
+        return surrounding;
     }
 }

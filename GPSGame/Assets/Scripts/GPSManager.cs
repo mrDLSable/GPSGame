@@ -10,7 +10,9 @@ public class GPSManager : MonoBehaviour
 
     public GameObject TilePrefab;
 
-    public Dictionary<TileCoords, TileData> WorldTiles = new Dictionary<TileCoords, TileData>();
+    public Dictionary<TileCoords, TileData> WorldTiles;
+
+    public static TileCoords centerTile;
 
     // Start is called before the first frame update
     void Start()
@@ -22,19 +24,44 @@ public class GPSManager : MonoBehaviour
     void Update()
     {
         SetGPSCoords();
-        TileCoords tileCoords = GetOpenMapsCoords(GPSCoords);
-        if(!WorldTiles.ContainsKey(tileCoords)){
-            Debug.Log(tileCoords);
-            InitiateTile(tileCoords);
+        if(WorldTiles == null){
+            InitiateWorld();
         }
     }
 
+    /// <summary>
+    /// Initiates the world
+    /// </summary>
+    private void InitiateWorld(){
+        WorldTiles = new Dictionary<TileCoords, TileData>();
+        TileCoords tileCoords = GetOpenMapsCoords(GPSCoords);
+        centerTile = tileCoords;
+        InitiateTile(tileCoords);
+        List<TileCoords> surrounding = tileCoords.GetSurrounding(3);
+        Debug.Log(surrounding.Count);
+        foreach(TileCoords tc in surrounding){
+            InitiateTile(tc);
+        }
+    }
+
+    /// <summary>
+    /// Initiates a single tile
+    /// </summary>
+    /// <param name="coords"></param>
     private void InitiateTile(TileCoords coords)
     {
-        GameObject temp = GameObject.Instantiate(TilePrefab);
-        TileData data = new TileData(coords);
-        temp.GetComponent<TileManager>().tileData = data;
-        WorldTiles.Add(coords, data);
+        Debug.Log($"Initiating tile {coords}");
+        if(WorldTiles.ContainsKey(coords)){
+
+        }else{
+            GameObject temp = GameObject.Instantiate(TilePrefab);
+            float xoffset = centerTile.x - coords.x;
+            float yoffset = coords.y - centerTile.y;
+            temp.transform.position = new Vector3(xoffset, yoffset, 0);
+            TileData data = new TileData(coords);
+            temp.GetComponent<TileManager>().tileData = data;
+            WorldTiles.Add(coords, data);
+        }
     }
 
     /// <summary>
