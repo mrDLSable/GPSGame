@@ -11,7 +11,12 @@ public class TileManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(DownloadImage(tileData.GetCoords().GetURL(), tileData.GetCoords().GetImagePath()));
+        string path = tileData.GetCoords().GetImagePath();
+        if(File.Exists(path)){
+            ImageFromFile(path);
+        }else{
+            StartCoroutine(ImageFromWeb(tileData.GetCoords().GetURL(), path));
+        }
     }
 
     // Update is called once per frame
@@ -21,12 +26,12 @@ public class TileManager : MonoBehaviour
     }
 
     /// <summary>
-    /// The actual texture downloader
+    /// Download the image and save it to a file, then apply it to the zone
     /// </summary>
     /// <param name="MediaUrl">The URL to download the image from</param>
     /// <param name="zoneID">The zone ID to apply the texture to</param>
     /// <returns></returns>
-    IEnumerator DownloadImage(string MediaUrl, string path)
+    IEnumerator ImageFromWeb(string MediaUrl, string path)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
         yield return request.SendWebRequest();
@@ -39,16 +44,28 @@ public class TileManager : MonoBehaviour
             System.Array.Reverse(pix, 0, pix.Length);
             texture.SetPixels(0, 0, 256, 256, pix);
             texture.Apply();
-            SaveTexture(texture, path);
+            SaveImage(texture, path);
             this.gameObject.GetComponent<Renderer>().material.mainTexture = texture;
         }
+    }
+
+    /// <summary>
+    /// Apply an image to the zone from a file
+    /// </summary>
+    /// <param name="path">The path to the image</param>
+    public void ImageFromFile(string path)
+    {
+        byte[] fileData = File.ReadAllBytes(path);
+        Texture2D texture = new Texture2D(256, 256);
+        texture.LoadImage(fileData);
+        gameObject.GetComponent<Renderer>().material.mainTexture = texture;
     }
 
     /// <summary>
     /// Saves the texture in the zone data to be saved.
     /// </summary>
     /// <param name="texture">The texture</param>
-    public void SaveTexture(Texture2D texture, string path)
+    public void SaveImage(Texture2D texture, string path)
     {
         if (!Directory.Exists(Application.persistentDataPath + "/zones/"))
         {
