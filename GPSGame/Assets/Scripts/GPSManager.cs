@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GPSManager : MonoBehaviour
 {
-    private Vector2 GPSCoords;
+    public static Vector2 GPSCoords;
     private Vector2 DebugCoords = new Vector2(-0.12754661804138964f, 51.50726853453877f); //London
 
     public GameObject TilePrefab;
@@ -26,6 +26,10 @@ public class GPSManager : MonoBehaviour
         SetGPSCoords();
         if(WorldTiles == null){
             InitiateWorld();
+        }
+
+        if(Input.GetKeyDown(KeyCode.W)){
+            GPSCoords.y += 0.005f;
         }
     }
 
