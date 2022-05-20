@@ -23,14 +23,18 @@ public class GPSManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SetGPSCoords();
+        if(GPSCoords == new Vector2()){
+            SetGPSCoords();
+        }
+        
         if(WorldTiles == null){
             InitiateWorld();
         }
 
-        if(Input.GetKeyDown(KeyCode.W)){
-            GPSCoords.y += 0.005f;
-        }
+        if(Input.GetKeyDown(KeyCode.W)) GPSCoords.y -= 0.1f;
+        if(Input.GetKeyDown(KeyCode.S)) GPSCoords.y += 0.1f;
+        if(Input.GetKeyDown(KeyCode.A)) GPSCoords.x += 0.1f;
+        if(Input.GetKeyDown(KeyCode.D)) GPSCoords.x -= 0.1f;
     }
 
     /// <summary>

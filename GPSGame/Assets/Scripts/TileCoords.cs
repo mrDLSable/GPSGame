@@ -28,6 +28,18 @@ public class TileCoords
     }
 
     /// <summary>
+    /// Converts the internal x and y position to GPS coordinates
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetGPS(){
+        Vector2 GPS = new Vector2();
+        GPS.x = x / (float)(1 << zoom) * 360.0f - 180;
+        float n = Mathf.PI - 2.0f * Mathf.PI * y / (float)(1 << zoom);
+        GPS.y = 180.0f / Mathf.PI * Mathf.Atan(0.5f * (Mathf.Exp(n) - Mathf.Exp(-n)));
+        return GPS;
+    }
+
+    /// <summary>
     /// Make a nice string from the x and y position of the tile
     /// </summary>
     /// <returns></returns>

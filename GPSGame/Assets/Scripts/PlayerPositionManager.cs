@@ -28,6 +28,9 @@ public class PlayerPositionManager : MonoBehaviour
     }
 
     private void UpdatePosition(){
-        //throw new NotImplementedException();
+        previousCoords = GPSManager.GPSCoords;
+        float deltax = GPSManager.centerTile.GetGPS().x - GPSManager.GPSCoords.x;
+        float deltay = GPSManager.centerTile.GetGPS().y - GPSManager.GPSCoords.y;
+        transform.position = new Vector3(deltax, deltay, transform.position.z);
     }
 }
