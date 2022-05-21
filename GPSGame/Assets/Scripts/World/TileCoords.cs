@@ -82,7 +82,9 @@ public class TileCoords
     {
         if(obj.GetType() == this.GetType()){
             TileCoords tc = (TileCoords)obj;
-            if(tc.x == this.x && tc.y == this.y) return true;
+            if(tc.x == this.x && tc.y == this.y){
+                return true;
+            } 
         }
         return false;
     }

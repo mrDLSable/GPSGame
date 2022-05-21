@@ -31,10 +31,42 @@ public class GPSManager : MonoBehaviour
             InitiateWorld();
         }
 
+        switch(Application.platform){
+            default:
+                UpdateDebug();
+                break;
+        }
+
+        if(!(new TileCoords(GPSCoords).x == centerTile.x && new TileCoords(GPSCoords).y == centerTile.y)){
+            Debug.LogWarning(new TileCoords(GPSCoords) + " : " + centerTile);
+            centerTile = new TileCoords(GPSCoords);
+            UpdateTilePositions();
+            LoadWorldAroundCenter(3);
+        }
+    }
+
+    /// <summary>
+    /// Update the GPS position when in editor
+    /// </summary>
+    private void UpdateDebug(){
         if(Input.GetKeyDown(KeyCode.W)) GPSCoords.y -= 0.1f;
         if(Input.GetKeyDown(KeyCode.S)) GPSCoords.y += 0.1f;
         if(Input.GetKeyDown(KeyCode.A)) GPSCoords.x += 0.1f;
         if(Input.GetKeyDown(KeyCode.D)) GPSCoords.x -= 0.1f;
+    }
+
+    private void LoadWorldAroundCenter(int radius){
+        if(!WorldTiles.ContainsKey(centerTile)) InitiateTile(centerTile);
+        List<TileCoords> surrounding = centerTile.GetSurrounding(radius);
+        foreach(TileCoords tc in surrounding){
+            InitiateTile(tc);
+        }
+    }
+
+    private void UpdateTilePositions(){
+        foreach(TileData data in WorldTiles.Values){
+            data.PositionGameObject();            
+        }
     }
 
     /// <summary>
@@ -44,31 +76,25 @@ public class GPSManager : MonoBehaviour
         WorldTiles = new Dictionary<TileCoords, TileData>();
         TileCoords tileCoords = GetOpenMapsCoords(GPSCoords);
         centerTile = tileCoords;
-        InitiateTile(tileCoords);
-        List<TileCoords> surrounding = tileCoords.GetSurrounding(3);
-        Debug.Log(surrounding.Count);
-        foreach(TileCoords tc in surrounding){
-            InitiateTile(tc);
-        }
+        LoadWorldAroundCenter(3);
     }
 
     /// <summary>
     /// Initiates a single tile
     /// </summary>
-    /// <param name="coords"></param>
-    private void InitiateTile(TileCoords coords)
+    /// <param name="tileCoords"></param>
+    private void InitiateTile(TileCoords tileCoords)
     {
-        Debug.Log($"Initiating tile {coords}");
-        if(WorldTiles.ContainsKey(coords)){
+        Debug.Log($"Initiating tile {tileCoords}");
+        if(WorldTiles.ContainsKey(tileCoords)){
 
         }else{
-            GameObject temp = GameObject.Instantiate(TilePrefab);
-            float xoffset = centerTile.x - coords.x;
-            float yoffset = coords.y - centerTile.y;
-            temp.transform.position = new Vector3(xoffset, yoffset, 0);
-            TileData data = new TileData(coords);
-            temp.GetComponent<TileManager>().tileData = data;
-            WorldTiles.Add(coords, data);
+            TileData tileData = new TileData(tileCoords);
+            GameObject tileGameObject = GameObject.Instantiate(TilePrefab);
+            tileData.SetGameObject(tileGameObject);
+            tileGameObject.GetComponent<TileManager>().tileData = tileData;
+            tileData.PositionGameObject();
+            WorldTiles.Add(tileCoords, tileData);
         }
     }
 
