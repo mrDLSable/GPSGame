@@ -31,6 +31,8 @@ public class PlayerPositionManager : MonoBehaviour
         previousCoords = GPSManager.GPSCoords;
         float deltax = GPSManager.centerTile.GetGPS().x - GPSManager.GPSCoords.x;
         float deltay = GPSManager.centerTile.GetGPS().y - GPSManager.GPSCoords.y;
-        transform.position = new Vector3(deltax, deltay, transform.position.z);
+        float multiplierX = GPSManager.centerTile.GetGPS().x - new TileCoords(GPSManager.centerTile.x - 1, GPSManager.centerTile.y).GetGPS().x;
+        float multiplierY = GPSManager.centerTile.GetGPS().y - new TileCoords(GPSManager.centerTile.x, GPSManager.centerTile.y - 1).GetGPS().y;
+        transform.position = new Vector3(deltax / multiplierX, deltay / multiplierY, transform.position.z);
     }
 }

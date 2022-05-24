@@ -37,9 +37,11 @@ public class GPSManager : MonoBehaviour
                 break;
         }
 
-        if(!(new TileCoords(GPSCoords).x == centerTile.x && new TileCoords(GPSCoords).y == centerTile.y)){
-            Debug.LogWarning(new TileCoords(GPSCoords) + " : " + centerTile);
-            centerTile = new TileCoords(GPSCoords);
+        TileCoords newCoords = new TileCoords(GPSCoords);
+
+        if(!(newCoords.x == centerTile.x && newCoords.y == centerTile.y)){
+            Debug.LogWarning(newCoords + " : " + centerTile);
+            centerTile = newCoords;
             UpdateTilePositions();
             LoadWorldAroundCenter(3);
         }
@@ -49,10 +51,11 @@ public class GPSManager : MonoBehaviour
     /// Update the GPS position when in editor
     /// </summary>
     private void UpdateDebug(){
-        if(Input.GetKeyDown(KeyCode.W)) GPSCoords.y -= 0.1f;
-        if(Input.GetKeyDown(KeyCode.S)) GPSCoords.y += 0.1f;
-        if(Input.GetKeyDown(KeyCode.A)) GPSCoords.x += 0.1f;
-        if(Input.GetKeyDown(KeyCode.D)) GPSCoords.x -= 0.1f;
+        float moveDelta = 0.0001f;
+        if(Input.GetKeyDown(KeyCode.W)) GPSCoords.y -= moveDelta;
+        if(Input.GetKeyDown(KeyCode.S)) GPSCoords.y += moveDelta;
+        if(Input.GetKeyDown(KeyCode.A)) GPSCoords.x += moveDelta;
+        if(Input.GetKeyDown(KeyCode.D)) GPSCoords.x -= moveDelta;
     }
 
     private void LoadWorldAroundCenter(int radius){
