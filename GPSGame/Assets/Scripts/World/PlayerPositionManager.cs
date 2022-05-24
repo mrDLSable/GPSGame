@@ -19,6 +19,7 @@ public class PlayerPositionManager : MonoBehaviour
         if(previousCoords == new Vector2()){
             if(GPSManager.GPSCoords != new Vector2()){
                 previousCoords = GPSManager.GPSCoords;
+                UpdatePosition();
             }
         }else{
             if(previousCoords != GPSManager.GPSCoords){
@@ -29,7 +30,7 @@ public class PlayerPositionManager : MonoBehaviour
 
     private void UpdatePosition(){
         previousCoords = GPSManager.GPSCoords;
-        float deltax = GPSManager.centerTile.GetGPS().x - GPSManager.GPSCoords.x;
+        float deltax = -GPSManager.centerTile.GetGPS().x + GPSManager.GPSCoords.x;
         float deltay = GPSManager.centerTile.GetGPS().y - GPSManager.GPSCoords.y;
         float multiplierX = GPSManager.centerTile.GetGPS().x - new TileCoords(GPSManager.centerTile.x - 1, GPSManager.centerTile.y).GetGPS().x;
         float multiplierY = GPSManager.centerTile.GetGPS().y - new TileCoords(GPSManager.centerTile.x, GPSManager.centerTile.y - 1).GetGPS().y;

@@ -52,10 +52,10 @@ public class GPSManager : MonoBehaviour
     /// </summary>
     private void UpdateDebug(){
         float moveDelta = 0.0001f;
-        if(Input.GetKeyDown(KeyCode.W)) GPSCoords.y -= moveDelta;
-        if(Input.GetKeyDown(KeyCode.S)) GPSCoords.y += moveDelta;
-        if(Input.GetKeyDown(KeyCode.A)) GPSCoords.x += moveDelta;
-        if(Input.GetKeyDown(KeyCode.D)) GPSCoords.x -= moveDelta;
+        if(Input.GetKeyDown(KeyCode.W)) GPSCoords.y += moveDelta;
+        if(Input.GetKeyDown(KeyCode.S)) GPSCoords.y -= moveDelta;
+        if(Input.GetKeyDown(KeyCode.A)) GPSCoords.x -= moveDelta;
+        if(Input.GetKeyDown(KeyCode.D)) GPSCoords.x += moveDelta;
     }
 
     private void LoadWorldAroundCenter(int radius){

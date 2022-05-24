@@ -109,4 +109,12 @@ public class TileCoords
 
         return surrounding;
     }
+
+    public Vector2 GetGamespaceCoords(){
+        Vector2 gameSpaceCoords = new Vector2();
+        gameSpaceCoords.x = -GPSManager.centerTile.x + this.x + 0.5f;
+        gameSpaceCoords.y = GPSManager.centerTile.y - this.y - 0.5f;
+
+        return gameSpaceCoords;
+    }
 }

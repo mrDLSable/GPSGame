@@ -22,7 +22,11 @@ public class TileManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(tileData.IsCenterTile()){
+            this.gameObject.GetComponent<Renderer>().material.color = Color.green;
+        }else{
+            this.gameObject.GetComponent<Renderer>().material.color = Color.white;
+        }
     }
 
     /// <summary>

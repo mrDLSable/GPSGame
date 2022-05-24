@@ -17,8 +17,11 @@ public class TileData
     }
 
     public void PositionGameObject(){
-        float xoffset = GPSManager.centerTile.x - tileCoords.x;
-        float yoffset = tileCoords.y - GPSManager.centerTile.y;
-        tileGameObject.transform.position = new Vector3(xoffset, yoffset, 0);
+        tileGameObject.transform.position = new Vector3(tileCoords.GetGamespaceCoords().x, tileCoords.GetGamespaceCoords().y, 0);
+    }
+
+    public bool IsCenterTile(){
+        if(tileCoords.x == GPSManager.centerTile.x && tileCoords.y == GPSManager.centerTile.y) return true;
+        return false;
     }
 }
