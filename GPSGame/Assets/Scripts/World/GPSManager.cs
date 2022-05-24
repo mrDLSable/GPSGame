@@ -13,6 +13,7 @@ public class GPSManager : MonoBehaviour
     public Dictionary<TileCoords, TileData> WorldTiles;
 
     public static TileCoords centerTile;
+    public const int TileRadius = 5;
 
     // Start is called before the first frame update
     void Start()
@@ -40,10 +41,9 @@ public class GPSManager : MonoBehaviour
         TileCoords newCoords = new TileCoords(GPSCoords);
 
         if(!(newCoords.x == centerTile.x && newCoords.y == centerTile.y)){
-            Debug.LogWarning(newCoords + " : " + centerTile);
             centerTile = newCoords;
             UpdateTilePositions();
-            LoadWorldAroundCenter(3);
+            LoadWorldAroundCenter(TileRadius);
         }
     }
 
@@ -64,6 +64,18 @@ public class GPSManager : MonoBehaviour
         foreach(TileCoords tc in surrounding){
             InitiateTile(tc);
         }
+
+        foreach (TileData tile in WorldTiles.Values)
+        {
+            TileCoords coords = tile.GetCoords();
+            if(Math.Abs(coords.x - centerTile.x) > TileRadius || Math.Abs(coords.y - centerTile.y) > TileRadius){
+                tile.DestroyGameObject();
+            }else{
+                if(!tile.HasGameObject()){
+                    CreateTileGameObject(tile);
+                }
+            }
+        }
     }
 
     private void UpdateTilePositions(){
@@ -79,7 +91,7 @@ public class GPSManager : MonoBehaviour
         WorldTiles = new Dictionary<TileCoords, TileData>();
         TileCoords tileCoords = GetOpenMapsCoords(GPSCoords);
         centerTile = tileCoords;
-        LoadWorldAroundCenter(3);
+        LoadWorldAroundCenter(TileRadius);
     }
 
     /// <summary>
@@ -88,17 +100,20 @@ public class GPSManager : MonoBehaviour
     /// <param name="tileCoords"></param>
     private void InitiateTile(TileCoords tileCoords)
     {
-        Debug.Log($"Initiating tile {tileCoords}");
         if(WorldTiles.ContainsKey(tileCoords)){
 
         }else{
             TileData tileData = new TileData(tileCoords);
-            GameObject tileGameObject = GameObject.Instantiate(TilePrefab);
-            tileData.SetGameObject(tileGameObject);
-            tileGameObject.GetComponent<TileManager>().tileData = tileData;
-            tileData.PositionGameObject();
+            CreateTileGameObject(tileData);
             WorldTiles.Add(tileCoords, tileData);
         }
+    }
+
+    private void CreateTileGameObject(TileData tileData){
+        GameObject tileGameObject = GameObject.Instantiate(TilePrefab);
+        tileData.SetGameObject(tileGameObject);
+        tileGameObject.GetComponent<TileManager>().tileData = tileData;
+        tileData.PositionGameObject();
     }
 
     /// <summary>

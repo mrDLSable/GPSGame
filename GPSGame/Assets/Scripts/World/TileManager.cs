@@ -79,4 +79,8 @@ public class TileManager : MonoBehaviour
         byte[] bytes = texture.EncodeToPNG();
         System.IO.File.WriteAllBytes(path, bytes);
     }
+
+    public void DestroyGameObject(){
+        Destroy(gameObject);
+    }
 }
