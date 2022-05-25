@@ -13,7 +13,7 @@ public class GPSManager : MonoBehaviour
     public Dictionary<TileCoords, TileData> WorldTiles;
 
     public static TileCoords centerTile;
-    public const int TileRadius = 5;
+    public const int TileRadius = 6;
 
     // Start is called before the first frame update
     void Start()
@@ -121,7 +121,7 @@ public class GPSManager : MonoBehaviour
     /// </summary>
     private void SetGPSCoords(){
         switch(Application.platform){
-            case RuntimePlatform.WindowsEditor:
+            default:
                 GPSCoords = DebugCoords;
                 break;
         }
