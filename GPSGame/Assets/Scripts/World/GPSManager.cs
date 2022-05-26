@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 
 public class GPSManager : MonoBehaviour
 {
@@ -33,6 +34,9 @@ public class GPSManager : MonoBehaviour
         }
 
         switch(Application.platform){
+            case RuntimePlatform.Android:
+                StartCoroutine(UpdateAndroid());
+                break;
             default:
                 UpdateDebug();
                 break;
@@ -56,6 +60,29 @@ public class GPSManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.S)) GPSCoords.y -= moveDelta;
         if(Input.GetKeyDown(KeyCode.A)) GPSCoords.x -= moveDelta;
         if(Input.GetKeyDown(KeyCode.D)) GPSCoords.x += moveDelta;
+    }
+
+    IEnumerator UpdateAndroid(){
+        if(Application.platform == RuntimePlatform.Android){
+            if(!Input.location.isEnabledByUser){
+                Permission.RequestUserPermission(Permission.FineLocation);
+                int permissionWaiter = 120;
+                while (!Input.location.isEnabledByUser && permissionWaiter >0){
+                    yield return new WaitForSeconds(1);
+                    permissionWaiter--;
+                }
+            }else{
+                if(Input.location.status == LocationServiceStatus.Stopped){
+                    Input.location.Start();
+                    int waitForStartup = 120;
+                    while(Input.location.status == LocationServiceStatus.Initializing && waitForStartup > 0){
+                        yield return new WaitForSeconds(1);
+                    }
+                }else if(Input.location.status == LocationServiceStatus.Running){
+                    GPSCoords = new Vector2(Input.location.lastData.longitude, Input.location.lastData.latitude);
+                }
+            }
+        }
     }
 
     private void LoadWorldAroundCenter(int radius){
@@ -121,6 +148,8 @@ public class GPSManager : MonoBehaviour
     /// </summary>
     private void SetGPSCoords(){
         switch(Application.platform){
+            case RuntimePlatform.Android:
+                break;
             default:
                 GPSCoords = DebugCoords;
                 break;
