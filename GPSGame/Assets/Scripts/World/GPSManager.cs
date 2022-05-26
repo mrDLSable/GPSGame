@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Android;
 
 public class GPSManager : MonoBehaviour
 {
@@ -15,12 +13,6 @@ public class GPSManager : MonoBehaviour
 
     public static TileCoords centerTile;
     public const int TileRadius = 6;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -35,7 +27,11 @@ public class GPSManager : MonoBehaviour
 
         switch(Application.platform){
             case RuntimePlatform.Android:
-                StartCoroutine(UpdateAndroid());
+                if(Input.location.status == LocationServiceStatus.Running){
+                    GPSManager_android.Update();
+                }else{
+                    StartCoroutine(GPSManager_android.Start());
+                }
                 break;
             default:
                 UpdateDebug();
@@ -62,29 +58,10 @@ public class GPSManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.D)) GPSCoords.x += moveDelta;
     }
 
-    IEnumerator UpdateAndroid(){
-        if(Application.platform == RuntimePlatform.Android){
-            if(!Input.location.isEnabledByUser){
-                Permission.RequestUserPermission(Permission.FineLocation);
-                int permissionWaiter = 120;
-                while (!Input.location.isEnabledByUser && permissionWaiter >0){
-                    yield return new WaitForSeconds(1);
-                    permissionWaiter--;
-                }
-            }else{
-                if(Input.location.status == LocationServiceStatus.Stopped){
-                    Input.location.Start();
-                    int waitForStartup = 120;
-                    while(Input.location.status == LocationServiceStatus.Initializing && waitForStartup > 0){
-                        yield return new WaitForSeconds(1);
-                    }
-                }else if(Input.location.status == LocationServiceStatus.Running){
-                    GPSCoords = new Vector2(Input.location.lastData.longitude, Input.location.lastData.latitude);
-                }
-            }
-        }
-    }
-
+    /// <summary>
+    /// Create tiles of a certain radius around the player position
+    /// </summary>
+    /// <param name="radius">The radius to be generated</param>
     private void LoadWorldAroundCenter(int radius){
         if(!WorldTiles.ContainsKey(centerTile)) InitiateTile(centerTile);
         List<TileCoords> surrounding = centerTile.GetSurrounding(radius);
@@ -105,6 +82,9 @@ public class GPSManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reposition the tiles around the center tile
+    /// </summary>
     private void UpdateTilePositions(){
         foreach(TileData data in WorldTiles.Values){
             data.PositionGameObject();            
@@ -116,7 +96,7 @@ public class GPSManager : MonoBehaviour
     /// </summary>
     private void InitiateWorld(){
         WorldTiles = new Dictionary<TileCoords, TileData>();
-        TileCoords tileCoords = GetOpenMapsCoords(GPSCoords);
+        TileCoords tileCoords = new TileCoords(GPSCoords);
         centerTile = tileCoords;
         LoadWorldAroundCenter(TileRadius);
     }
@@ -136,6 +116,10 @@ public class GPSManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Create a gameobject for a given tiledata object
+    /// </summary>
+    /// <param name="tileData"></param>
     private void CreateTileGameObject(TileData tileData){
         GameObject tileGameObject = GameObject.Instantiate(TilePrefab);
         tileData.SetGameObject(tileGameObject);
@@ -154,15 +138,5 @@ public class GPSManager : MonoBehaviour
                 GPSCoords = DebugCoords;
                 break;
         }
-    }
-
-    /// <summary>
-    /// Convert the GPS coordinates to Open Maps tile coordinates.
-    /// </summary>
-    /// <param name="GPSCoords"></param>
-    /// <returns></returns>
-    private TileCoords GetOpenMapsCoords(Vector2 GPSCoords){
-        TileCoords tileCoords = new TileCoords(GPSCoords);
-        return tileCoords;
     }
 }
