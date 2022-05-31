@@ -10,6 +10,7 @@ public class GPSManager : MonoBehaviour
     public GameObject TilePrefab;
 
     public Dictionary<TileCoords, TileData> WorldTiles;
+    public List<GPSPathPoint> pathPoints;
 
     public static TileCoords centerTile;
     public static TileCoords currentTile;
@@ -46,6 +47,8 @@ public class GPSManager : MonoBehaviour
             UpdateTilePositions();
             LoadWorldAroundCurrent(TileRadius);
         }
+
+        UpdateGPSPath();
     }
 
     /// <summary>
@@ -83,6 +86,25 @@ public class GPSManager : MonoBehaviour
         }
     }
 
+    private void UpdateGPSPath(){
+        if(currentTile != null){
+            if(pathPoints.Count == 0){
+                pathPoints.Add(CreatePointAtCurrentPosition());
+            }else{
+                GPSPathPoint tempPathPoint = CreatePointAtCurrentPosition();
+                if(pathPoints[pathPoints.Count - 1].DistanceToPoint(tempPathPoint) > 50f){
+                    pathPoints.Add(tempPathPoint);
+                    Debug.Log(pathPoints[pathPoints.Count - 1].DistanceToPoint(tempPathPoint));
+                }
+            }
+        }
+    }
+
+    private GPSPathPoint CreatePointAtCurrentPosition(){
+        GPSPathPoint pathPoint = new GPSPathPoint(GPSCoords);
+        return pathPoint;
+    }
+
     /// <summary>
     /// Reposition the tiles around the center tile
     /// </summary>
@@ -101,6 +123,7 @@ public class GPSManager : MonoBehaviour
     /// Initiates the world
     /// </summary>
     private void InitiateWorld(){
+        pathPoints = new List<GPSPathPoint>();
         WorldTiles = new Dictionary<TileCoords, TileData>();
         TileCoords tileCoords = new TileCoords(GPSCoords);
         centerTile = tileCoords;
