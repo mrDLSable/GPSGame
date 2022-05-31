@@ -12,6 +12,7 @@ public class GPSManager : MonoBehaviour
     public Dictionary<TileCoords, TileData> WorldTiles;
 
     public static TileCoords centerTile;
+    public static TileCoords currentTile;
     public const int TileRadius = 6;
 
     // Update is called once per frame
@@ -40,10 +41,10 @@ public class GPSManager : MonoBehaviour
 
         TileCoords newCoords = new TileCoords(GPSCoords);
 
-        if(!(newCoords.x == centerTile.x && newCoords.y == centerTile.y)){
-            centerTile = newCoords;
+        if(!(newCoords.x == currentTile.x && newCoords.y == currentTile.y)){
+            currentTile = newCoords;
             UpdateTilePositions();
-            LoadWorldAroundCenter(TileRadius);
+            LoadWorldAroundCurrent(TileRadius);
         }
     }
 
@@ -62,9 +63,9 @@ public class GPSManager : MonoBehaviour
     /// Create tiles of a certain radius around the player position
     /// </summary>
     /// <param name="radius">The radius to be generated</param>
-    private void LoadWorldAroundCenter(int radius){
-        if(!WorldTiles.ContainsKey(centerTile)) InitiateTile(centerTile);
-        List<TileCoords> surrounding = centerTile.GetSurrounding(radius);
+    private void LoadWorldAroundCurrent(int radius){
+        if(!WorldTiles.ContainsKey(currentTile)) InitiateTile(currentTile);
+        List<TileCoords> surrounding = currentTile.GetSurrounding(radius);
         foreach(TileCoords tc in surrounding){
             InitiateTile(tc);
         }
@@ -72,7 +73,7 @@ public class GPSManager : MonoBehaviour
         foreach (TileData tile in WorldTiles.Values)
         {
             TileCoords coords = tile.GetCoords();
-            if(Math.Abs(coords.x - centerTile.x) > TileRadius || Math.Abs(coords.y - centerTile.y) > TileRadius){
+            if(Math.Abs(coords.x - currentTile.x) > TileRadius || Math.Abs(coords.y - currentTile.y) > TileRadius){
                 tile.DestroyGameObject();
             }else{
                 if(!tile.HasGameObject()){
@@ -86,6 +87,11 @@ public class GPSManager : MonoBehaviour
     /// Reposition the tiles around the center tile
     /// </summary>
     private void UpdateTilePositions(){
+        int deltaX = Math.Abs(centerTile.x - currentTile.x);
+        int deltaY = Math.Abs(centerTile.y - currentTile.y);
+        if(deltaX >= 1000 || deltaY >= 1000){
+            centerTile = currentTile;
+        }
         foreach(TileData data in WorldTiles.Values){
             data.PositionGameObject();            
         }
@@ -98,7 +104,8 @@ public class GPSManager : MonoBehaviour
         WorldTiles = new Dictionary<TileCoords, TileData>();
         TileCoords tileCoords = new TileCoords(GPSCoords);
         centerTile = tileCoords;
-        LoadWorldAroundCenter(TileRadius);
+        currentTile = tileCoords;
+        LoadWorldAroundCurrent(TileRadius);
     }
 
     /// <summary>

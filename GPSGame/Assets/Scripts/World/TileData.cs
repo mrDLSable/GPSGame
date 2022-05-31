@@ -21,8 +21,8 @@ public class TileData
         tileGameObject.transform.position = new Vector3(tileCoords.GetGamespaceCoords().x, tileCoords.GetGamespaceCoords().y, 0);
     }
 
-    public bool IsCenterTile(){
-        if(tileCoords.x == GPSManager.centerTile.x && tileCoords.y == GPSManager.centerTile.y) return true;
+    public bool isCurrentTile(){
+        if(tileCoords.x == GPSManager.currentTile.x && tileCoords.y == GPSManager.currentTile.y) return true;
         return false;
     }
 
