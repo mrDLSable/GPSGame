@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -434,6 +434,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1441239451}
   - component: {fileID: 1441239452}
+  - component: {fileID: 1441239453}
   m_Layer: 0
   m_Name: GPSManager
   m_TagString: Untagged
@@ -469,3 +470,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TilePrefab: {fileID: 5670312912101027327, guid: 526a70ee109a3d24a9911b6f324d60c8, type: 3}
+--- !u!114 &1441239453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441239450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8233977716a2ea844af28c1f2657f8a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Skills:
+  - {fileID: 11400000, guid: 88f84da9c0f2fe94a9a4b6b595016b97, type: 2}
+  - {fileID: 11400000, guid: d1873b4337f46eb4386cd3274c5feb37, type: 2}
+  - {fileID: 11400000, guid: 970b7d8b6201e9144aff53456da63aa6, type: 2}
+  - {fileID: 11400000, guid: 6c45c1cc8427acc41917b6cc25203f95, type: 2}
+  - {fileID: 11400000, guid: c66df0f13122f8745be8e8dd8b8aa547, type: 2}
+  - {fileID: 11400000, guid: c6e90fc25cf7d7b45a791e276683da69, type: 2}
+  - {fileID: 11400000, guid: 4dcff5833335fa14c954fd3defde619a, type: 2}
+  - {fileID: 11400000, guid: 0f0f0c293de594a4bbf0ec7e43f932b6, type: 2}
+  - {fileID: 11400000, guid: 2ab78bd6f4bd50346ae5e42065600382, type: 2}
