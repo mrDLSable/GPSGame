@@ -435,6 +435,7 @@ GameObject:
   - component: {fileID: 1441239451}
   - component: {fileID: 1441239452}
   - component: {fileID: 1441239453}
+  - component: {fileID: 1441239454}
   m_Layer: 0
   m_Name: GPSManager
   m_TagString: Untagged
@@ -492,3 +493,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4dcff5833335fa14c954fd3defde619a, type: 2}
   - {fileID: 11400000, guid: 0f0f0c293de594a4bbf0ec7e43f932b6, type: 2}
   - {fileID: 11400000, guid: 2ab78bd6f4bd50346ae5e42065600382, type: 2}
+--- !u!114 &1441239454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441239450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eccfcfa710eeb649b98e1605207fcaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultSkill: {fileID: 11400000, guid: 88f84da9c0f2fe94a9a4b6b595016b97, type: 2}

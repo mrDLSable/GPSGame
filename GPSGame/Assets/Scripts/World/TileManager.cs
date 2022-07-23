@@ -22,11 +22,19 @@ public class TileManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(tileData.isCurrentTile()){
+        ColorTile();
+    }
+
+    private void ColorTile(){
+        if(GetSkillTile().IsGatherable()){
             this.gameObject.GetComponent<Renderer>().material.color = Color.green;
         }else{
             this.gameObject.GetComponent<Renderer>().material.color = Color.white;
         }
+    }
+
+    private SkillTile GetSkillTile(){
+        return SaveManager._saveManager.GetSkillTile(tileData.GetCoords());
     }
 
     /// <summary>
