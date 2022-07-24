@@ -8,4 +8,5 @@ public class Skill : ScriptableObject{
     public string Description;
     public bool Enabled;
     public Skill Parent;
+    public float Difficulty = 1f;
 }

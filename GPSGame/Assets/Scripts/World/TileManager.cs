@@ -23,6 +23,11 @@ public class TileManager : MonoBehaviour
     void Update()
     {
         ColorTile();
+        if(tileData.isCurrentTile()){
+            if(GetSkillTile().IsGatherable()){
+                GetSkillTile().Gather();
+            }
+        }
     }
 
     private void ColorTile(){
