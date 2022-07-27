@@ -33,7 +33,7 @@ public class SaveManager : MonoBehaviour
         if(latestSave.AddSeconds(5) <= DateTime.Now){
             DateTime now = DateTime.Now;
             Save(saveData, "latest");
-            Save(saveData, $"{now.Year}{now.Month}{now.Day} {now.Hour}{now.Minute}{now.Second}");
+            Save(saveData, $"{now.Year.ToString("D4")}{now.Month.ToString("D2")}{now.Day.ToString("D2")} {now.Hour.ToString("D2")}{now.Minute.ToString("D2")}{now.Second.ToString("D2")}");
         }
     }
 
