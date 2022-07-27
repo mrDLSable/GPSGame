@@ -13,11 +13,8 @@ public class SkillTile
     public int level;
 
     public bool IsGatherable(){
-        DateTime epoch = lastGather.AddHours(Math.Pow(2, level));
+        DateTime epoch = lastGather.AddSeconds(GPSManager._gpsManager.zoneDeltaTime * Math.Pow(2, level));
         if(epoch <= DateTime.Now){
-            if(lastGather != new DateTime()){
-                Debug.Log(lastGather);
-            }
             return true;
         }
         return false;

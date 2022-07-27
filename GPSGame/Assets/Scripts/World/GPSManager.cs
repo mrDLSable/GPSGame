@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GPSManager : MonoBehaviour
 {
+    public static GPSManager _gpsManager;
+
     public static Vector2 GPSCoords;
     private Vector2 DebugCoords = new Vector2(-0.12754661804138964f, 51.50726853453877f); //London
 
@@ -16,9 +18,13 @@ public class GPSManager : MonoBehaviour
     public static TileCoords currentTile;
     public const int TileRadius = 6;
 
+    public int zoneDeltaTime = 86400;
+
     // Update is called once per frame
     void Update()
     {
+        _gpsManager = this;
+        
         if(GPSCoords == new Vector2()){
             SetGPSCoords();
         }

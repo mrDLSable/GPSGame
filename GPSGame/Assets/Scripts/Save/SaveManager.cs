@@ -31,7 +31,9 @@ public class SaveManager : MonoBehaviour
     void Update()
     {
         if(latestSave.AddSeconds(5) <= DateTime.Now){
+            DateTime now = DateTime.Now;
             Save(saveData, "latest");
+            Save(saveData, $"{now.Year}{now.Month}{now.Day} {now.Hour}{now.Minute}{now.Second}");
         }
     }
 
